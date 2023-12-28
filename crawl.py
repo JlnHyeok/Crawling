@@ -22,7 +22,7 @@ class CrawlingManager():
             print('Chrome이 설치되어 있는지 확인해주세요.')
     
     def img_crawling(self, keyword='python', save_path='./save'):
-        self.driver.get("https://www.google.com/search?q=%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%EC%82%AC%EC%A7%84&tbm=isch&ved=2ahUKEwi69uOPia-DAxXr0DQHHas4AU8Q2-cCegQIABAA&oq=%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%EC%82%AC%EC%A7%84&gs_lcp=CgNpbWcQAzIFCAAQgAQyBggAEAUQHjIGCAAQBRAeMgYIABAFEB4yBggAEAUQHjIGCAAQBRAeMgYIABAFEB46BAgjECc6BAgAEAM6CAgAEIAEELEDOgcIIxDqAhAnOgsIABCABBCxAxCDAToHCAAQgAQQGFDbB1ijH2CsIGgGcAB4AoABkwGIAc4QkgEENy4xM5gBAKABAaoBC2d3cy13aXotaW1nsAEKwAEB&sclient=img&ei=LM-LZbqwH-uh0-kPq_GE-AQ&bih=1319&biw=2560&hl=ko")
+        self.driver.get("https://www.google.com/search?q=%EB%88%88%EA%B0%90%EA%B3%A0+%EC%9E%88%EB%8A%94+%EC%82%AC%EC%A7%84&tbm=isch&ved=2ahUKEwj885mNq6-DAxUwmFYBHUxzAI4Q2-cCegQIABAA&oq=%EB%88%88%EA%B0%90%EA%B3%A0+%EC%9E%88%EB%8A%94+%EC%82%AC%EC%A7%84&gs_lcp=CgNpbWcQAzoECCMQJzoFCAAQgAQ6BggAEAcQHjoHCAAQgAQQGFD5B1iTFmC8F2gAcAB4AYABdIgBpA2SAQQyLjE0mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=zfKLZbzZN7Cw2roPzOaB8Ag&bih=1319&biw=2560&hl=ko")
         # time.sleep(2)
         # elem = self.driver.find_elements(By.ID, "APjFqb")
         # elem.send_keys(keyword)    # search word

@@ -1,8 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 import urllib.request
-
 import time
 from tqdm import tqdm
 
@@ -16,16 +16,17 @@ class CrawlingManager():
             options = Options()
             options.add_experimental_option("detach", True)  # 브라우저 바로 닫힘 방지
             options.add_experimental_option("excludeSwitches", ["enable-logging"])  # 불필요한 메시지 제거
-            driver = webdriver.Chrome(ChromeDriverManager(path='DRIVER').install(), options=options)
+            driver = webdriver.Chrome(options=options)
             self.driver = driver
         except:
             print('Chrome이 설치되어 있는지 확인해주세요.')
     
-    def img_crawling(self, keyword='python', save_path='.'):
-        self.driver.get("https://www.google.co.kr/imghp?hl=ko&ogbl")
-        elem = self.driver.find_element_by_name("q")
-        elem.send_keys(keyword)    # search word
-        elem.submit()
+    def img_crawling(self, keyword='python', save_path='./save'):
+        self.driver.get("https://www.google.com/search?q=%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%EC%82%AC%EC%A7%84&tbm=isch&ved=2ahUKEwi69uOPia-DAxXr0DQHHas4AU8Q2-cCegQIABAA&oq=%EA%B3%B5%EB%B6%80%ED%95%98%EB%8A%94+%EC%82%AC%EC%A7%84&gs_lcp=CgNpbWcQAzIFCAAQgAQyBggAEAUQHjIGCAAQBRAeMgYIABAFEB4yBggAEAUQHjIGCAAQBRAeMgYIABAFEB46BAgjECc6BAgAEAM6CAgAEIAEELEDOgcIIxDqAhAnOgsIABCABBCxAxCDAToHCAAQgAQQGFDbB1ijH2CsIGgGcAB4AoABkwGIAc4QkgEENy4xM5gBAKABAaoBC2d3cy13aXotaW1nsAEKwAEB&sclient=img&ei=LM-LZbqwH-uh0-kPq_GE-AQ&bih=1319&biw=2560&hl=ko")
+        # time.sleep(2)
+        # elem = self.driver.find_elements(By.ID, "APjFqb")
+        # elem.send_keys(keyword)    # search word
+        # elem.submit()
 
         SCROLL_PAUSE_TIME = 2
         # Get scroll height
@@ -39,22 +40,29 @@ class CrawlingManager():
             new_height = self.driver.execute_script("return document.body.scrollHeight")
             if new_height == last_height:
                 try:
-                    self.driver.find_element_by_css_selector(".mye4qd").click()
+                    self.driver.find_element(By.CSS_SELECTOR,".mye4qd").click()
                 except:
                     break
             last_height = new_height
 
-        images = self.driver.find_elements_by_css_selector('.rg_i.Q4LuWd')
+        images = self.driver.find_elements(By.CSS_SELECTOR,'.rg_i.Q4LuWd')
         
         idx = 1
         for image in tqdm(images):
             try:
                 image.click()   # To get more quality images
                 time.sleep(1)
-                imgUrl = self.driver.find_element_by_css_selector('.n3VNCb.KAlRDb').get_attribute("src")
-                urllib.request.urlretrieve(imgUrl, f'{save_path}/{str(idx)}.jpg')
+                imgUrl = self.driver.find_element(By.XPATH, '//*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div/div[3]/div[1]/a/img[1]').get_attribute("src")
+                
+                print(imgUrl)
+                imgUrl = imgUrl.replace('https', 'http') # https로 요청할 경우 보안 문제로 SSL에러가 남
+                opener = urllib.request.build_opener()
+                opener.addheaders = [('User-Agent', 'Mozilla/5.0')] # https://docs.python.org/3/library/urllib.request.html 참고
+                urllib.request.install_opener(opener)
+                urllib.request.urlretrieve(imgUrl, f'{save_path}/{idx}.jpg')
                 idx += 1
             except:
+                print('error')
                 pass
 
         self.driver.close()
@@ -63,7 +71,7 @@ class CrawlingManager():
 def main():
     # dir_path = '.'
     cm = CrawlingManager()
-    cm.img_crawling(keyword='dog')
+    cm.img_crawling(keyword='졸고있는 사진')
 
 
 
